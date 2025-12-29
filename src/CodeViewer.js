@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Prism from "prismjs";
 import "prismjs/themes/prism-tomorrow.css";
 import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import ReactMarkdown from "react-markdown";
 
 export default function CodeViewer({ file }) {
   const [code, setCode] = useState("");
@@ -12,6 +14,9 @@ export default function CodeViewer({ file }) {
   const [activeMatch, setActiveMatch] = useState(0);
 
   const containerRef = useRef(null);
+
+  const isMarkdown = file?.endsWith(".md");
+  const language = file?.endsWith(".ts") ? "typescript" : "javascript";
 
   useEffect(() => {
     if (!file) return;
@@ -35,12 +40,12 @@ export default function CodeViewer({ file }) {
   }, [file]);
 
   const highlightedHtml = useMemo(() => {
-    if (!code) return "";
+    if (!code || isMarkdown) return "";
 
     let html = Prism.highlight(
       code,
-      Prism.languages.javascript,
-      "javascript"
+      Prism.languages[language],
+      language
     );
 
     if (!search) return html;
@@ -56,13 +61,13 @@ export default function CodeViewer({ file }) {
         ? `<mark class="active-match">${match}</mark>`
         : `<mark>${match}</mark>`;
     });
-  }, [code, search, activeMatch]);
+  }, [code, search, activeMatch, language, isMarkdown]);
 
   const matchCount = useMemo(() => {
-    if (!search) return 0;
+    if (!search || isMarkdown) return 0;
     const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     return (code.match(new RegExp(escaped, "gi")) || []).length;
-  }, [code, search]);
+  }, [code, search, isMarkdown]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -82,9 +87,10 @@ export default function CodeViewer({ file }) {
             setSearch(e.target.value);
             setActiveMatch(0);
           }}
+          disabled={isMarkdown}
         />
 
-        {matchCount > 0 && (
+        {!isMarkdown && matchCount > 0 && (
           <div className="search-nav">
             <button
               onClick={() =>
@@ -117,13 +123,19 @@ export default function CodeViewer({ file }) {
       {error && <div className="error">Error: {error}</div>}
 
       {!loading && !error && (
-        <pre className="code-pre">
-          <code
-            ref={containerRef}
-            className="language-javascript"
-            dangerouslySetInnerHTML={{ __html: highlightedHtml }}
-          />
-        </pre>
+        isMarkdown ? (
+          <div className="markdown-body">
+            <ReactMarkdown>{code}</ReactMarkdown>
+          </div>
+        ) : (
+          <pre className="code-pre">
+            <code
+              ref={containerRef}
+              className={`language-${language}`}
+              dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+            />
+          </pre>
+        )
       )}
     </div>
   );

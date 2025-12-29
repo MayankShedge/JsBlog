@@ -262,6 +262,34 @@ export const filesByCategory = {
     files: [
       "DebounceAndThrottle.js"
     ]
-  }
+  },
+
+"TypeScript Basics": {
+  path: "26TypeScript",
+  files: [
+    "AbstractClass.ts",
+    "DiscriminatedUnions.ts",
+    "functions.ts",
+    "GenericClasses.ts",
+    "Generics.ts",
+    "GenericsArrays.ts",
+    "Getter&Setters.ts",
+    "InstanceofandTypePredicates.ts",
+    "Interface.ts",
+    "Intro.md",
+    "Intro.ts",
+    "myObjects.ts",
+    "Narrowing.ts",
+    "Protected.ts",
+    "ReadOnly.ts",
+    "TS2.md",
+    "Tuples.ts",
+    "typeAliases.ts",
+    "TypeModifiers.ts",
+    "UnionTypes.ts",
+    "variable.ts"
+  ]
+}
+
 }
 
