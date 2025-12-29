@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async Await</title>
+</head>
+<body>
+    <h1>Hi Mayank</h1>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button> 
+</body>
+<script>
+
+    const sayDate = function(str){ // can pass 3rd parameter also in setTimeout or setInterval
+        console.log(`${str} id = ${Date.now()}`);
+    }
+
+    const changeText = function(){
+        document.querySelector('h1').innerHTML = 'This is changed now'
+    }
+
+    let textInterval;
+
+    let dateInterval;
+
+    // Start the interval by making use of or applying the startInterval(handler(){},timeint) on the start button
+    const startBtn = document.getElementById('start')
+    startBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        dateInterval = setInterval(sayDate, 2000, "Mayank") // lexical scoping isiliye yaha interval set hone pe bhi interval main declaration pe hi set hoga jo defined hai globally
+        textInterval = setInterval(changeText , 2000)
+    })
+
+    // Stop the intervalby making use of or applying the clearInterval(reference_of_) on the start button
+    const endBtn = document.getElementById('stop')
+    endBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        clearInterval(dateInterval)
+        clearInterval(textInterval)
+    })
+
+    // setInterval(sayDate, 1000) // Ye bhi same hai setTimeout ke tarah jaha first ham handler ya function reference call karenge aur 2nd mai time value. Just ek baat mai ye differ karega ki ye unlike setTimeout bas ek baar run nahi hoga but ye run karte jaega infinte number of times after provided interval time until someone dose not stop it using clearInterval()
+</script>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+</head>
+<body>
+    <button>Click Here</button>
+</body>
+<script>
+
+    //  What is `bind()`?
+    // `bind()` ek built-in method hai jo ek **new function return** karta hai jisme `this` ka context **permanently fix (bind)** kar diya jata hai.
+    //It **does not call** the function immediately (unlike `call()` or `apply()`), it just **returns a new copy** of the function with a fixed `this`.
+
+    // Syntax :- function.bind(thisArg , arg1 , arg2 ,....)
+    // thisArg - kis object ka reference this hona chaiye
+    // arg1,arg2 -- optional arguments jo prefilled honge
+
+    class React {
+        constructor(){
+            this.library = "React"
+            this.server = "https://localhost:3000"
+
+            // requirement
+            // Jaise hi ye page load ho aur ek object ban jaye react ka toh mujhe iss button ka reference mil jana chaiye aur ek method ho handleClick ka usse kuch response aa jaye like button clicked
+            document.querySelector('button').addEventListener('click', this.handleClick.bind(this)) // iss React class ke context ke handleClick ko access karne
+            // Jab ham ye likhte hai normal js mai handleClick() ke andar this React class instance ko refer nahi karega , instead this uss event koo refer karega jisse event trigger hua hai(remember Event DOM mai this refer karta hai uss element lo jisne uss event ko trigger kiya hai yani iss case mai hamara button)
+            // Isiliye jab ham this.server karre hai niche vo undefined aara hai kyuki this is referrering the button element not the class React
+
+            // Bind manually fix karta hai this ke reference ko
+            // What dose .bind(this) do?
+            // ye create karta hai copy of handleClick() aur uss copy ke andar permanently set kar dega this = current React instance
+
+            // Ab ye bind ke karn handleClick jo reference lera tha vo toh jaega hi uss element ka reference but uske saath ye jo baki properties ya methods hai vo bhi chale jaenge iske saath(variables and func) par inhone kuch overwrite kara tha
+        }
+        handleClick(){
+            console.log('Button Clicked');
+            console.log(this.server); // ab ye vapis kho gaya hai hamare pass aa nahi raha ye. But iss baar if we have button in this not {} ua {window} matlab vo global ko point nahi karra but jo component/element usee trigger karva raha hai usse reference kar raha hai
+            // Ab kya hota tha ki jab ham handleClick likhte the vo chalta nahi tha toh aise situation ke liye bind introduce hua tha 
+            // Bind manually aur forcefully sirf reference nahi deta tha vo bind ko actualy bind(attach) karta tha 
+        }
+    }
+
+    const app = new React()
+</script>
+</html>

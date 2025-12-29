@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async Await</title>
+</head>
+<body style="background-color: #212121; color: #fff;">
+    <h1>Welcome to the Color Playground</h1>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button> 
+</body>
+<script>
+    
+    //  Step 1: Color array 
+    // const myColors = [
+    // 'aliceblue', 'green', 'blue', 'red', 'yellow',
+    // 'gray', 'orange', 'pink', 'black', 'white',
+    // 'aquamarine', 'fuchsia'
+    // ];
+
+    // // Step 2: Get buttons
+    // const startBtn = document.getElementById('start');
+    // const stopBtn = document.getElementById('stop');
+
+    // // Step 3: Index tracker & interval variable
+    // let currentIndex = 0;
+    // let playColor;
+
+    // // Step 4: Function to change color
+    // const changeColor = function() {
+    // document.body.style.backgroundColor = myColors[currentIndex];
+    
+    // // move to next color
+    // currentIndex++;
+
+    // // reset if reached end of array
+    // if (currentIndex >= myColors.length) {
+    //     currentIndex = 0;
+    // }
+    // };
+
+    // // Step 5: Start button
+    // startBtn.addEventListener('click', (e) => {
+    // e.preventDefault();
+
+    // // avoid multiple intervals if start clicked repeatedly
+    // if (!playColor) {
+    //     playColor = setInterval(changeColor, 2000);
+    // }
+    // }, false);
+
+    // // Step 6: Stop button
+    // stopBtn.addEventListener('click', (e) => {
+    // e.preventDefault();
+
+    // clearInterval(playColor);
+    // playColor = null; // reset interval reference
+    // }, false);
+
+    // Way 2 :
+
+    // generate a random color 
+    const randomColor = function(){
+        const hex = "0123456789ABCDEF"
+        let color = "#"
+        for (let i = 0; i < 6; i++) {
+            color += hex[Math.floor(Math.random() * 16)]
+        }
+        console.log(color);
+        return color;
+    }
+
+    let intervalId;
+
+    const startBtn = document.getElementById('start');
+    const stopBtn = document.getElementById('stop');
+
+    const startChangingColor = function(){
+
+        // to avoid user spamming multiple setInterval check if intervalId is null(ya hai hi nahi)
+        if (!intervalId) {
+            intervalId = setInterval(changeBackgroundColor, 1000)
+        }
+        
+
+        function changeBackgroundColor() {
+            document.body.style.backgroundColor = randomColor();
+        }
+    }
+
+    const stopChangingColor = function(){
+        clearInterval(intervalId)
+        // Flush out the intervalId jab uske kaam ho jaye
+        intervalId = null; // reset it so it works in (!intervalId)
+    }
+
+    startBtn.addEventListener('click', startChangingColor);
+    stopBtn.addEventListener('click', stopChangingColor);
+
+</script>
+</html>

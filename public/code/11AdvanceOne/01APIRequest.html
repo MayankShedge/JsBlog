@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Requests</title>
+</head>
+<body style="border-color: #212121; color: #FFF;">
+<!--
+    Value   	State	                            Description
+    0	        UNSENT	                            Client has been created.open() not called yet.
+    1	        OPENED	                            open() has been called.
+    2	        HEADERS_RECEIVED	                send() has been called, and headers and status are available.
+    3	        LOADING	                            Downloading; responseText holds partial data.
+    4	        DONE	                            The operation is complete.
+-->
+<h1>Hi Mayank</h1>  
+</body>
+<script>
+
+    const requestUrl = 'https://api.github.com/users/MayankShedge'
+
+    // ek naya XMLHttpRequest() object create karlo
+    const xhr = new XMLHttpRequest() // Ye ek method hai jiske andar ye sa ready states vagera sab hota hai aur isi ke through ham apna data send aur receive kar sakte hai
+
+    xhr.open('GET',requestUrl) // open method initialise kiya jiske andar lagta hai ek method aur ek string
+
+    // to continiously track the states 
+    xhr.onreadystatechange = function(){ // Ye ek function leta hai 
+        console.log(xhr.readyState);
+        if (xhr.readyState === 4) {
+            // responseText object ek milta hai isme toh iss context mai usse access karne ke liye this.responseText se access kar liya 
+            // const data = this.responseText // ye hame milega string ke form mai isse object mai convert karna padega
+            const data = JSON.parse(this.responseText) // isse JSON.parse() se hamne oject mai convert kar liya taki usse valid JSON object jaise access kar paye uske andar ka data
+            console.log(data.public_repos);  // Ab kyuki hamare pass responseText object mila tha usko ek variable mai store karke uski keys ko access kar sakte hai
+            // Ab upar undefined aaega pehle kyuki data jo hame receive hoga vo string form mai hai naki object toh hame usse object mai convert karna padega 
+        }
+    }
+
+    // upar jo code likha hai usse actually request jati nahi hai as also specified in documentation isko call karna padta hai. Open apne aap mai call nahi hota isse send() se call hota hai
+    
+    // Jab request send hoti hai toh status codes change ho jata hai 
+    xhr.send()
+
+</script>
+</html>

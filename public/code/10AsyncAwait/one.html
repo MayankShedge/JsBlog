@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async Await</title>
+</head>
+<body>
+    <h1>Hi Mayank</h1>
+    <button id="Stop">Stop</button>
+</body>
+<script>
+
+    // Normal function
+    // function sayHi(){ //isme yahape naam diya hai
+    //     console.log('Hi Mayank');
+    // }
+
+    // Handler function - kuch exceptional functions kabhi kabhi demand karte hai handler ka use without definfing a function name in specific 
+    // function(){ // isme nahi diya
+    //     console.log('Hi Mayank');
+    // }
+
+    // Way 1
+    // setTimeout(function(){
+    //     console.log('Mayank'); // setTimeout jo particular interval provided hota hai usse uske baad bas 1 baar run hoga then it will automatically stop
+    // }, 2000) // ye sabse pehle mangta hai handler(ek func jiska naam nahi hai, halaki ye jaruri nahi ki uska naam hi na ho, ho sakta hai func kahi aur likha ho bas uska reference dere hai ) aur dusra chaiye timeout jo number ke form mai milta hai 
+
+    // Way 2
+    const sayMayank = function(){
+        console.log('Mayank');
+    }
+    
+    setTimeout(sayMayank, 2000) // isme instead of handler we give a reference to the variable (remember reference dena hai not the execution call)
+
+    const changeText = function(){
+        document.querySelector('h1').innerHTML = "Plan mai thoda change rahega"
+    }
+
+    const changeMe = setTimeout(changeText, 3000);
+
+    // How to stop the execution of setTimeout then ?
+    // clearTimeout(changeMe) // Note that yahape bhi bas reference hi dena hai not the execution of the function
+
+    const stopBtn = document.getElementById('Stop')
+
+    stopBtn.addEventListener('click' , (e) => {
+        e.preventDefault()
+        clearTimeout(changeMe)
+    }, false)
+
+</script>
+</html>

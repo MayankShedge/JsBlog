@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closure</title>
+</head>
+<body style="background-color: #212121; color: #fff;">
+    <button id="orange">Orange</button>
+    <button id="green">Green</button>
+</body>
+<script>
+
+    // function init() {
+    // let name = "Mozilla"; 
+    //     function displayName() {
+    //         console.log(name); 
+    //     }
+    //     displayName();
+    // }
+    // init();
+
+    // Lexical scoping - Ek special case senario Jab func ke andar ek aur function hoga (phir vo 1 ya multiple dosen't matter) un sabko sare variables ka access milega bahar vale function ke variables ka ya jo bhi memory reserve kari hai uska
+    // Technical lang mai - Inner function ke pass outer function ke scope ka access hota hai
+
+    // function outer(){
+    //     let username = "Mayank"
+    //     let age = 22
+    //     // Jab function ke andar ham ek aur function banate hai toh usme ye dono function ke bich memory share hoti hai
+    //     function inner(){
+    //         let mySecret = "my123"
+    //         console.log("Inner ", username);
+    //     }
+    //     function innerTwo(){
+    //         console.log(`${username} ka age is ${age}`); // yahape bhi access hai matlab sare child functions ko milega
+    //         console.log(mySecret); // Agar parent hai toh kuch bhi le sakte ho magar 2 siblings ke bich kuch share nahi hoga
+    //     }
+    //     console.log(mySecret); // Ye bhi possible nahi hai kyuki chote bado se maang sakte hai(child parent se) but vice versa (parent child se) is not possible 
+    //     inner();
+    //     innerTwo();
+    // }
+    // outer();
+    // Function ke andar jo bhi declare karra vo outer space mai available nahi hai
+    // Hamare pass ek Global execution context hota hai aur uske uparjab ham function declare karate hai toh voh function execution context banta hai
+    // console.log("TOO OUTER ",username); // Ye available nahi hoga yahape out of scope
+
+
+    // Closure - Jab ham ek function return karte hai toh sirf function return nahi hota uska pura ka pura scope(lexical scope) return hota hai (remember ki scope hamesha lexical scope return hoga)
+    // function makeFunc() {
+    //     const name = "Mozilla";
+    //     function displayName() {
+    //         console.log(name);
+    //     }
+    //     return displayName; // Jab makeFunc ko execute kara aur return kar diya displayName toh sirf diplayName nahi jaega (ya hatega func execution context se) uske saath agar koi outer function bhi exsists karta hai uska bhi pura scope jaega
+    //     // Lexical scoping ke vajah se ye jata hai
+    //     // Toh iss case mai puri memory share hoti hai na ki function ka executional context
+    // }
+    // const myFunc = makeFunc();
+    // myFunc();
+</script>
+
+<script>
+    // let orgBtn = document.getElementById('orange')
+    // orgBtn.addEventListener('click', (e) => {
+    //     e.preventDefault()
+    //     document.body.style.backgroundColor = 'orange'
+    // })
+
+    // let greenBtn = document.getElementById('green')
+    // greenBtn.addEventListener('click', (e) => {
+    //     e.preventDefault()
+    //     document.body.style.backgroundColor = 'green'
+    // })
+
+    function clickHandler(color){
+        // document.body.style.backgroundColor = `${color}`
+        // Ab yahape jo hamne ye niche function return kiya hamne abhi closure padha tha 
+        // TOh yahape iss case mai sirf ye function return hoga kya? nahi ye jo color hai vo aata hai iss function ke lexical scope se (obvisouly ye color as parameter lera hai toh ye present hoga iss function ke parent clickHandler ke scope mai jo iss function ka lexical scope ban jaega)
+        return function(){
+            document.body.style.backgroundColor = `${color}`
+        }
+    } 
+
+    document.getElementById('orange').onclick = clickHandler(color) // onclick ko hamesha function execution[clickHandler()] chaiye naki reference[clickHandler]
+
+</script>
+
+</html>
