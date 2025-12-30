@@ -212,6 +212,11 @@
   margin-top: 16px;
 }
 
+.code-toolbar input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .markdown-body code {
   background: var(--color-secondary);
   padding: 2px 6px;

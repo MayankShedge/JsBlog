@@ -77,11 +77,14 @@ export default function CodeViewer({ file }) {
 
   return (
     <div className="code-viewer">
-      {/* SEARCH BAR */}
       <div className="code-toolbar">
         <input
           type="text"
-          placeholder="Search in file (e.g. async, closure)"
+          placeholder={
+            isMarkdown
+              ? "Search disabled for Markdown files"
+              : "Search in file (e.g. async, closure)"
+          }
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
