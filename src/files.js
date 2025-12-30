@@ -1,11 +1,3 @@
-export const files = [
-  "01Variables.js",
-  "promises.js",
-  "eventLoop.js",
-  "debounceThrottle.js",
-  "asyncAwait.js"
-];
-
 export const filesByCategory = {
   "01 Basics": {
     path: "01Basics",

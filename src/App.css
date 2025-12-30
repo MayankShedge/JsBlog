@@ -1365,3 +1365,118 @@ mark {
 .folder-title:hover {
   background: rgba(255, 255, 255, 0.05);
 }
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+}
+
+.sidebar {
+  position: relative;
+  width: 280px;
+  height: 100vh;
+  z-index: 10;
+  transform: none;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+.hamburger-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  /* IMPORTANT: prevent column stacking */
+  .app {
+    flex-direction: row;
+  }
+
+  /* Show hamburger ONLY on mobile */
+  .hamburger-btn {
+    display: block;
+  }
+
+  /* Sidebar becomes overlay drawer */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    height: 100vh;
+    width: 280px;
+
+    background: var(--color-surface);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
+    z-index: 50;
+
+    pointer-events: none;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  /* Backdrop visible only on mobile */
+  .sidebar-backdrop {
+    display: block;
+  }
+
+  /* Main content full width */
+  .main-content {
+    width: 100%;
+  }
+
+  /* Header compact */
+  .header {
+    padding: var(--space-12);
+    gap: 8px;
+  }
+
+  .header h1 {
+    font-size: var(--font-size-md);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Main layout must be column */
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Header takes only required height */
+  .header {
+    flex-shrink: 0;
+  }
+
+  /* CodeViewer must take remaining space */
+  .code-viewer {
+    flex: 1;
+    min-height: 0; /* CRITICAL for mobile flexbox */
+    overflow-y: auto;
+  }
+
+  /* Code block should stretch */
+  .code-pre {
+    min-height: 100%;
+  }
+}

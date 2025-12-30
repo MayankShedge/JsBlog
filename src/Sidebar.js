@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { filesByCategory } from "./files";
 
-export default function Sidebar({ currentFile, onFileSelect }) {
+export default function Sidebar({
+  currentFile,
+  onFileSelect,
+  isOpen,
+  onClose,
+}) {
   const [searchTerm, setSearchTerm] = useState("");
   const [openFolders, setOpenFolders] = useState({});
 
@@ -40,73 +45,83 @@ export default function Sidebar({ currentFile, onFileSelect }) {
   };
 
   return (
-    <aside className="sidebar">
-      {/* Header */}
-      <div className="sidebar-header">
-        <h2>📝 JS Notes</h2>
-        <input
-          type="text"
-          placeholder="Search files..."
-          className="search-input"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
+    <>
+      {isOpen && <div className="sidebar-backdrop" onClick={onClose} />}
 
-      {/* Folder + File List */}
-      <div className="file-list">
-        {filteredCategories.length > 0 ? (
-          filteredCategories.map(({ categoryName, path, files }) => {
-            const isOpen = openFolders[path];
+      <aside className={`sidebar ${isOpen ? "open" : ""}`}>
+        <div className="sidebar-header">
+          <div className="sidebar-title-row">
+            <h2>📝 JS Notes</h2>
 
-            return (
-              <div key={path} className="folder">
-                {/* Folder Header */}
-                <button
-                  className="folder-title"
-                  onClick={() => toggleFolder(path)}
-                >
-                  <span>{isOpen ? "📂" : "📁"}</span>
-                  <span>{categoryName}</span>
-                </button>
+            <button
+              className="sidebar-close-btn"
+              onClick={onClose}
+              aria-label="Close sidebar"
+            >
+              ✕
+            </button>
+          </div>
 
-                {/* Files */}
-                {isOpen &&
-                  files.map((file) => {
-                    const fullPath = `${path}/${file}`;
+          <input
+            type="text"
+            placeholder="Search files..."
+            className="search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
 
-                    return (
-                      <button
-                        key={fullPath}
-                        className={`file-button ${
-                          fullPath === currentFile ? "active" : ""
-                        }`}
-                        onClick={() => onFileSelect(fullPath)}
-                        title={file}
-                      >
-                        <span className="file-icon">📄</span>
-                        <span className="file-name">{file}</span>
-                      </button>
-                    );
-                  })}
-              </div>
-            );
-          })
-        ) : (
-          <div className="no-files">No files found</div>
-        )}
-      </div>
+        <div className="file-list">
+          {filteredCategories.length > 0 ? (
+            filteredCategories.map(({ categoryName, path, files }) => {
+              const isOpenFolder = openFolders[path];
 
-      {/* Footer */}
-      <div className="sidebar-footer">
-        <small>
-          {Object.values(filesByCategory).reduce(
-            (acc, cat) => acc + cat.files.length,
-            0
-          )}{" "}
-          files total
-        </small>
-      </div>
-    </aside>
+              return (
+                <div key={path} className="folder">
+                  <button
+                    className="folder-title"
+                    onClick={() => toggleFolder(path)}
+                  >
+                    <span>{isOpenFolder ? "📂" : "📁"}</span>
+                    <span>{categoryName}</span>
+                  </button>
+
+                  {isOpenFolder &&
+                    files.map((file) => {
+                      const fullPath = `${path}/${file}`;
+
+                      return (
+                        <button
+                          key={fullPath}
+                          className={`file-button ${
+                            fullPath === currentFile ? "active" : ""
+                          }`}
+                          onClick={() => onFileSelect(fullPath)}
+                          title={file}
+                        >
+                          <span className="file-icon">📄</span>
+                          <span className="file-name">{file}</span>
+                        </button>
+                      );
+                    })}
+                </div>
+              );
+            })
+          ) : (
+            <div className="no-files">No files found</div>
+          )}
+        </div>
+
+        <div className="sidebar-footer">
+          <small>
+            {Object.values(filesByCategory).reduce(
+              (acc, cat) => acc + cat.files.length,
+              0
+            )}{" "}
+            files total
+          </small>
+        </div>
+      </aside>
+    </>
   );
 }

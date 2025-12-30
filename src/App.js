@@ -1,9 +1,8 @@
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import Sidebar from "./Sidebar";
 import CodeViewer from "./CodeViewer";
-import { files } from "./files.js";
-
+// import { files } from "./files.js";
 
 function App() {
   const [currentFile, setCurrentFile] = useState(
@@ -15,7 +14,6 @@ function App() {
       localStorage.setItem("lastFile", currentFile);
     }
   }, [currentFile]);
-
 
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") || "dark"
@@ -30,26 +28,42 @@ function App() {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const openSidebar = () => setIsSidebarOpen(true);
+  const closeSidebar = () => setIsSidebarOpen(false);
 
   return (
     <div className="app">
-      <Sidebar currentFile={currentFile} onFileSelect={setCurrentFile} />
+      <Sidebar
+        currentFile={currentFile}
+        onFileSelect={(file) => {
+          setCurrentFile(file);
+          closeSidebar(); 
+        }}
+        isOpen={isSidebarOpen}
+        onClose={closeSidebar}
+      />
+
       <main className="main-content">
         <div className="header">
-          <h1>{currentFile || "Select a file"}</h1>
+          <button
+            className="hamburger-btn"
+            onClick={openSidebar}
+            aria-label="Open sidebar"
+          >
+            ☰
+          </button>
+
+          <h1 className="header-title">
+            {currentFile || "Select a file"}
+          </h1>
+
           <button className="theme-toggle" onClick={toggleTheme}>
             {theme === "dark" ? "🌙 Dark" : "☀️ Light"}
           </button>
-          <div className="meta">
-            {currentFile && (
-              <>
-                <span className="file-index">
-                  {files.indexOf(currentFile) + 1} of {files.length}
-                </span>
-              </>
-            )}
-          </div>
         </div>
+
         {currentFile ? (
           <CodeViewer file={currentFile} />
         ) : (
